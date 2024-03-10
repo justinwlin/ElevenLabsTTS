@@ -17,7 +17,39 @@ ELEVENLABS_VOICE_IDS = {
     "DAN": "OZCcpR3NOKIgWxketgTO",  # Young American Male
 }
 
-import requests
+def get_character_counts(api_key, text):
+    """
+    Retrieves the current character count, character limit, and projected count after adding the text.
+
+    Parameters:
+    api_key (str): The ELEVEN_LABS API KEY.
+    text (str): The text to be checked.
+
+    Returns:
+    dict: A dictionary containing the current count, max count, and projected count.
+        - current_count (int): The current character count.
+        - max_count (int): The character limit.
+        - projected_count (int): The projected character count after adding the text.
+    """
+    try:
+        # Get the user information
+        user_info = get_user_info(api_key)
+        current_character_count = user_info["current_character_count"]
+        character_limit = user_info["character_limit"]
+
+        # Calculate the total characters if the text is added
+        total_characters = current_character_count + len(text)
+
+        # Return the character counts as a dictionary
+        return {
+            "current_count": current_character_count,
+            "max_count": character_limit,
+            "projected_count": total_characters
+        }
+
+    except Exception as e:
+        print(f"Error occurred while retrieving character counts: {str(e)}")
+        return None
 
 def check_character_limit(api_key, text):
     """
